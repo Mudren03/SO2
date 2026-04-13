@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "header.h"
 
 int main(int argc, char **argv) {
@@ -8,6 +5,8 @@ int main(int argc, char **argv) {
     int maxVariabili = 100; // o quello che vuoi
     variabile *lista = calloc(maxVariabili, sizeof(variabile));
     int count = 0;
+    int ultimaAssegnazione = 0;
+    Statistiche *stats = calloc(maxVariabili, sizeof(variabile));
 
     //controlla prima argc =3
     if (argc!=3){
@@ -54,15 +53,32 @@ int main(int argc, char **argv) {
     fclose(inputFile);
     
     // 🔥 chiama funzione che estrae variabili
-    lista = estraiVariabili(fileContent, lista, &count);
+    lista = estraiVariabili(fileContent, lista, &count, &ultimaAssegnazione);
+
+    calcolaUtilizzoVariabili(fileContent, lista, &count);
+
+    calcolaVariabiliNonUsate(lista, stats, &count);
+
+    // printf("\n%lu\n", sizeof(lista));
+    for (size_t i = 0; i < count; i++)
+    {
+        // printf("la variabile cosiderata è: %s\n", lista[i].name);
+        isNomeValido(lista[i].name, stats);
+    }
+    
+    
 
     printf("Variabili trovate: %d\n", count);
+    // printf("Ultima riga contatore: %i\n", ultimaAssegnazione);
+    printf("Errori totali: %d\n", stats->erroriTotali);
+    printf("Errori nomi: %d\n", stats->erroriNomi);
+    printf("Errori utilizzo: %d\n", stats->nonUsate);
 
     for (int i = 0; i < count; i++) {
-        printf("%s %s (utilizzo %d)\n",
+        /*printf("%s %s (utilizzo %d)\n",
             lista[i].tipo,
             lista[i].name,
-            lista[i].usageCount);
+            lista[i].usageCount);*/
 
         fprintf(outputFile, "%s %s (utilizzo %d)\n",
             lista[i].tipo,

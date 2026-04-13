@@ -41,14 +41,8 @@ int main() {
 
     valore = 3.14;
     _ok = c;
+    buffer[2] = 'a';
 
-    // 🔹 NON USATE
-    // d
-    // x
-    // nome
-    // z
-    // buffer
-    // w
 
     printf("Test completato: %d\n", a);
 
